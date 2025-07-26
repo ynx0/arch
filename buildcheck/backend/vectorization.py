@@ -17,19 +17,17 @@ class Category(Enum):
     # Extend as needed
 
 
-@dataclass
-class Point:
+@dataclass(frozen=True)
+class Point():
     x: float
     y: float
 
-@dataclass
+
+@dataclass(frozen=True)
 class Edge:
     a: Point
     b: Point
 
-    def __str__(self):
-        return f"Edge(a=({self.a.x}, {self.a.y}), b=({self.b.x}, {self.b.y}))"
-    
 
 @dataclass
 class BBox:
@@ -41,26 +39,27 @@ class BBox:
         return [self.a, self.b, self.c, self.d]
     
 # Represents a floor plan symbol such as a window, door, etc. 
-@dataclass
+@dataclass(frozen=True)
 class Symbol:
     category: Category
     bbox: BBox
 
-    def __str__(self):
-        return f"Symbol(category={self.category}, bbox={self.bbox})"
-    
 
 # Metadata Definitions
 @dataclass
 class Label:
     text: str
+
+
 #A class that represents the width and height of a room recovered from the OCR process
-@dataclass
+@dataclass(frozen=True)
 class Dimension:
     width: float
     height: float
 
 Metadata = Union[Label, Dimension]
+
+
 
 class Room:
     def __init__(
@@ -81,22 +80,21 @@ class Room:
         return cls(points)
 
 
-    def __str__(self):
-        return (
-            f"Room(junctions={self.junctions}, "
-            f"symbols={self.symbols}, metadata={self.metadata})"
-        )
+
+
+
 
 class Layout:
     def __init__(
         self,
         rooms: list[Room] = [],
-        metadata: list[Metadata] = [],
         file_name: str = None,
     ):
         self.rooms = rooms
-        self.metadata = metadata
         self.file_name = file_name
 
     def add_room(self, room: Room):
         self.rooms.append(room)
+
+
+
